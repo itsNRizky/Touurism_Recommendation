@@ -12,12 +12,12 @@ const RecommendStay = () => {
   const [budget, setBudget] = useState(0);
   const [initialBudget, setInitialBudget] = useState(0);
   const [stays, setStays] = useState([]);
-  const [selected, setSelected] = useState(location.state.selected);
+  const [stay, setStay] = useState(JSON.parse(sessionStorage.getItem("stay")));
 
   useEffect(() => {
     setInitialBudget(formData.budget);
-    setBudget(formData.budget);
-    setDuration(formData.duration == 1 ? 1 : formData.duration - 1);
+    setBudget(sessionStorage.getItem("budget").replace(/,/g, ""));
+    setDuration(formData.duration);
     fetch("http://localhost:5000/api/recommend_penginapan", {
       method: "POST",
       headers: {
@@ -31,7 +31,15 @@ const RecommendStay = () => {
   }, []);
 
   const budgetSubstractStayHandler = (price) => {
-    setBudget(initialBudget - price);
+    const substractedPrice = initialBudget - price * duration;
+    if (substractedPrice < 0) {
+      alert(
+        "Sepertinya item ini terlalu mahal untuk budget kamu, pilih ulang ya!"
+      );
+      window.location.reload();
+    } else {
+      setBudget(substractedPrice);
+    }
   };
 
   useEffect(() => {
@@ -42,24 +50,18 @@ const RecommendStay = () => {
   }, [budget]);
 
   const submitHandler = (e) => {
-    if (selected.stay.name_hotel !== undefined) {
+    if (stay.name_hotel !== undefined) {
       e.preventDefault();
+      sessionStorage.setItem("budget", budget);
+      sessionStorage.setItem("stay", JSON.stringify(stay));
       navigate("/recommend/destination", {
         state: {
           formData: formData,
-          selected: selected,
         },
       });
     } else {
       alert("Anda belum memilih tempat penginapan!");
     }
-  };
-
-  const selectedHandler = (data) => {
-    setSelected((prevSelected) => ({
-      ...prevSelected,
-      stay: data,
-    }));
   };
 
   return (
@@ -89,7 +91,7 @@ const RecommendStay = () => {
           </div>
         </nav>
         <div className="h-[60vh] overflow-y-auto">
-          <RadioGroup aria-required value={selected} onChange={selectedHandler}>
+          <RadioGroup aria-required value={stay} onChange={setStay}>
             {stays.length !== 0 ? (
               stays.map((s) => (
                 <RadioGroup.Option
@@ -97,22 +99,21 @@ const RecommendStay = () => {
                     budgetSubstractStayHandler(s.price);
                   }}
                   key={s.id}
-                  value={{
-                    name_hotel: s.name_hotel,
-                    name_room: s.name_room,
-                    price: s.price * duration,
-                    room_type: s.type,
-                  }}
+                  value={s}
                 >
-                  {({ active }) => (
-                    <StayCard
-                      className={active ? "bg-green-500" : "bg-[#0373F3]"}
-                      stay_name={s.name_hotel}
-                      room_name={s.name_room}
-                      price={s.price * duration}
-                      room_type={s.type}
-                      duration={duration}
-                    />
+                  {() => (
+                    <>
+                      <StayCard
+                        className={
+                          s.id === stay.id ? "bg-green-500" : "bg-[#0373F3]"
+                        }
+                        stay_name={s.name_hotel}
+                        room_name={s.name_room}
+                        price={s.price * duration}
+                        room_type={s.type}
+                        duration={duration}
+                      />
+                    </>
                   )}
                 </RadioGroup.Option>
               ))

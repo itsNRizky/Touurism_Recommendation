@@ -12,8 +12,7 @@ const Home = () => {
   return (
     <div className="px-4">
       <h1 className="my-10 text-4xl font-bold leading-normal text-[#2E323E] sm:my-6">
-        Temukan keajaiban di kota{" "}
-        <span className="text-[#0373F3]">Madiun!</span>
+        Temukan keajaiban di <span className="text-[#0373F3]">Madiun!</span>
       </h1>
       <div className="">
         <div className="flex justify-between">

@@ -10,11 +10,10 @@ const RecommendDestination = () => {
 
   const [budget, setBudget] = useState(0);
   const [destinations, setDestinations] = useState([]);
-  const [selected, setSelected] = useState(location.state.selected);
+  const [destination, setDestination] = useState();
   const [tempSelectedDestinations, setTempSelectedDestinations] = useState([]);
 
   useEffect(() => {
-    console.log(location);
     setBudget(formData.budget);
     fetch("http://localhost:5000/api/recommend_wisata", {
       method: "POST",
@@ -34,7 +33,6 @@ const RecommendDestination = () => {
 
   const budgetSubstractDestinationHandler = (price) => {
     const substractedPrice = budget - price;
-    console.log(substractedPrice);
     if (substractedPrice < 0) {
       alert(
         "Sepertinya item ini terlalu mahal untuk budget kamu, pilih ulang ya!"
@@ -53,12 +51,13 @@ const RecommendDestination = () => {
   }, [budget]);
 
   const submitHandler = (e) => {
-    if (selected.destination.length !== 0) {
+    if (destination.length !== 0) {
       e.preventDefault();
+      sessionStorage.setItem("destination", JSON.stringify(destination));
+      sessionStorage.setItem("budget", budget);
       navigate("/recommend/result", {
         state: {
           formData: formData,
-          selected: selected,
         },
       });
     } else {
@@ -75,10 +74,7 @@ const RecommendDestination = () => {
   };
 
   useEffect(() => {
-    setSelected((prevSelected) => ({
-      ...prevSelected,
-      destination: tempSelectedDestinations,
-    }));
+    setDestination(tempSelectedDestinations);
   }, [tempSelectedDestinations]);
 
   const addSelectedDestination = (destination) => {

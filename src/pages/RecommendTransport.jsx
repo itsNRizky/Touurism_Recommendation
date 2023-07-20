@@ -11,26 +11,36 @@ const RecommendTransport = () => {
   const [budget, setBudget] = useState(0);
   const [initialBudget, setInitialBudget] = useState(0);
   const [transportations, setTransportations] = useState([]);
-  const [selected, setSelected] = useState({
-    transportation: {},
-    stay: {},
-    destination: {},
-  });
+  const [transport, setTransport] = useState(
+    JSON.parse(sessionStorage.getItem("transport"))
+  );
 
   useEffect(() => {
-    setInitialBudget(formData.budget);
-    setBudget(formData.budget);
+    setInitialBudget(formData.budget.replace(/,/g, ""));
+    setBudget(sessionStorage.getItem("budget").replace(/,/g, ""));
     fetch("http://localhost:5000/api/recommend_transportasi", {
       method: "POST",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(formData),
+      body: JSON.stringify({
+        origin: formData.origin,
+        duration: formData.duartion,
+        departure: formData.departure,
+        budget: formData.budget.replace(/,/g, ""),
+        transport_preference: formData.transport_preference,
+        stay_preference: formData.stay_preference,
+        destination_preference: formData.destination_preference,
+      }),
     })
       .then((res) => res.json())
       .then((res) => setTransportations(res));
   }, []);
+
+  useEffect(() => {
+    setTransport(JSON.parse(sessionStorage.getItem("transport")));
+  }, [transportations]);
 
   useEffect(() => {
     setFormData((prevData) => ({
@@ -49,21 +59,17 @@ const RecommendTransport = () => {
   };
 
   const submitHandler = (e) => {
-    if (selected.transportation.train_name !== undefined) {
+    if (transport.train_name !== undefined) {
       e.preventDefault();
+      sessionStorage.setItem("transport", JSON.stringify(transport));
+      sessionStorage.setItem("stay", JSON.stringify({ id: "" }));
+      sessionStorage.setItem("budget", budget);
       navigate("/recommend/stay", {
-        state: { formData: formData, selected: selected },
+        state: { formData: formData },
       });
     } else {
       alert("Anda belum memilih transportasi!");
     }
-  };
-
-  const selectedHandler = (data) => {
-    setSelected((prevSelected) => ({
-      ...prevSelected,
-      transportation: data,
-    }));
   };
 
   return (
@@ -95,8 +101,8 @@ const RecommendTransport = () => {
         <div className="h-[60vh] overflow-y-auto">
           <RadioGroup
             aria-required={"true"}
-            value={selected}
-            onChange={selectedHandler}
+            value={transport}
+            onChange={setTransport}
           >
             {transportations.length !== 0 ? (
               transportations.map((t) => (
@@ -105,23 +111,23 @@ const RecommendTransport = () => {
                     budgetSubstractTransportHandler(t.price);
                   }}
                   key={t.id}
-                  value={{
-                    train_name: t.train_name,
-                    train_class: t.train_class,
-                    price: t.price,
-                    depart: t.time_start,
-                    arrival: t.time_end,
-                  }}
+                  value={t}
                 >
-                  {({ active }) => (
-                    <TransportCard
-                      className={active ? "bg-green-500" : "bg-[#0373F3]"}
-                      train_name={t.train_name}
-                      train_class={t.train_class}
-                      price={t.price}
-                      depart={t.time_start}
-                      arrival={t.time_end}
-                    />
+                  {() => (
+                    <>
+                      <TransportCard
+                        className={`${
+                          t.id === transport.id
+                            ? "bg-green-500"
+                            : "bg-[#0373F3]"
+                        }`}
+                        train_name={t.train_name}
+                        train_class={t.train_class}
+                        price={t.price}
+                        depart={t.time_start}
+                        arrival={t.time_end}
+                      />
+                    </>
                   )}
                 </RadioGroup.Option>
               ))

@@ -8,8 +8,10 @@ const RecommendResult = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const duration = location.state.formData.duration;
-  const result = location.state.selected;
-  const budget = location.state.formData.budget;
+  const transport = JSON.parse(sessionStorage.getItem("transport"));
+  const stay = JSON.parse(sessionStorage.getItem("stay"));
+  const destination = JSON.parse(sessionStorage.getItem("destination"));
+  const budget = JSON.parse(sessionStorage.getItem("budget"));
 
   const submitHandler = () => {
     navigate("/");
@@ -28,22 +30,22 @@ const RecommendResult = () => {
       <div className="mt-5">
         <div className="h-[70vh] overflow-y-auto">
           <TransportCard
-            arrival={result.transportation.arrival}
-            depart={result.transportation.depart}
-            price={result.transportation.price}
-            train_class={result.transportation.train_class}
-            train_name={result.transportation.train_name}
+            arrival={transport.time_start}
+            depart={transport.time_end}
+            price={transport.price}
+            train_class={transport.train_class}
+            train_name={transport.train_name}
             className={"bg-[#0373F3]"}
           />
           <StayCard
             className={"bg-[#0373F3]"}
-            price={result.stay.price}
-            room_name={result.stay.name_room}
-            room_type={result.stay.room_type}
-            stay_name={result.stay.name_hotel}
-            duration={duration == 1 ? 1 : duration - 1}
+            price={stay.price * duration}
+            room_name={stay.name_room}
+            room_type={stay.room_type}
+            stay_name={stay.name_hotel}
+            duration={duration}
           />
-          {result.destination.map((d) => (
+          {destination.map((d) => (
             <DestinationCard
               key={d.id}
               address={d.address}
