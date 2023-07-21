@@ -5,7 +5,14 @@ import { useEffect, useState } from "react";
 const Home = () => {
   const [destination, setDestination] = useState([]);
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_SERVER}/api/bestplaces?id=`)
+    fetch(`${import.meta.env.VITE_API_SERVER}/api/bestplaces?id=`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: {},
+    })
       .then((res) => res.json())
       .then((res) => setDestination(res.slice(0, 5)));
   }, []);
