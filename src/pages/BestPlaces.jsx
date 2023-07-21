@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 const BestPlaces = () => {
   const [destination, setDestination] = useState([]);
   useEffect(() => {
-    fetch("http://localhost:5000/api/bestplaces?id=")
+    fetch(`${import.meta.env.VITE_API_SERVER}/api/bestplaces?id=`)
       .then((res) => res.json())
       .then((res) => setDestination(res));
   }, []);

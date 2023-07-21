@@ -15,7 +15,7 @@ const RecommendDestination = () => {
 
   useEffect(() => {
     setBudget(formData.budget);
-    fetch("http://localhost:5000/api/recommend_wisata", {
+    fetch(`${import.meta.env.VITE_API_SERVER}/api/recommend_wisata`, {
       method: "POST",
       headers: {
         Accept: "application/json",

@@ -18,7 +18,7 @@ const RecommendStay = () => {
     setInitialBudget(formData.budget);
     setBudget(sessionStorage.getItem("budget").replace(/,/g, ""));
     setDuration(formData.duration);
-    fetch("http://localhost:5000/api/recommend_penginapan", {
+    fetch(`${import.meta.env.VITE_API_SERVER}/api/recommend_penginapan`, {
       method: "POST",
       headers: {
         Accept: "application/json",

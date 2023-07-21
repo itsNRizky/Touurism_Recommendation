@@ -18,7 +18,7 @@ const RecommendTransport = () => {
   useEffect(() => {
     setInitialBudget(formData.budget.replace(/,/g, ""));
     setBudget(sessionStorage.getItem("budget").replace(/,/g, ""));
-    fetch("http://localhost:5000/api/recommend_transportasi", {
+    fetch(`${import.meta.env.VITE_API_SERVER}/api/recommend_transportasi`, {
       method: "POST",
       headers: {
         Accept: "application/json",
