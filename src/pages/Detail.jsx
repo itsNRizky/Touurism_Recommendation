@@ -8,7 +8,7 @@ const Detail = () => {
   const { id } = useParams();
   const [destination, setDestination] = useState({});
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_SERVER}/api/bestplaces?id=${id}`, {
+    fetch(`https://nrizky.pythonanywhere.com/api/bestplaces?id=${id}`, {
       method: "POST",
       headers: {
         Accept: "application/json",

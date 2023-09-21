@@ -18,7 +18,7 @@ const RecommendStay = () => {
     setInitialBudget(formData.budget);
     setBudget(sessionStorage.getItem("budget").replace(/,/g, ""));
     setDuration(formData.duration);
-    fetch(`${import.meta.env.VITE_API_SERVER}/api/recommend_penginapan`, {
+    fetch(`https://nrizky.pythonanywhere.com/api/recommend_penginapan`, {
       method: "POST",
       headers: {
         Accept: "application/json",

@@ -15,7 +15,7 @@ const RecommendDestination = () => {
 
   useEffect(() => {
     setBudget(formData.budget);
-    fetch(`${import.meta.env.VITE_API_SERVER}/api/recommend_wisata`, {
+    fetch(`https://nrizky.pythonanywhere.com/api/recommend_wisata`, {
       method: "POST",
       headers: {
         Accept: "application/json",

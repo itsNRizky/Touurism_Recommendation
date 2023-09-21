@@ -18,7 +18,7 @@ const RecommendTransport = () => {
   useEffect(() => {
     setInitialBudget(formData.budget.replace(/,/g, ""));
     setBudget(sessionStorage.getItem("budget").replace(/,/g, ""));
-    fetch(`${import.meta.env.VITE_API_SERVER}/api/recommend_transportasi`, {
+    fetch(`https://nrizky.pythonanywhere.com/api/recommend_transportasi`, {
       method: "POST",
       headers: {
         Accept: "application/json",

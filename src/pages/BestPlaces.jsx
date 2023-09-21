@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 const BestPlaces = () => {
   const [destination, setDestination] = useState([]);
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_SERVER}/api/bestplaces?id=`, {
+    fetch(`https://nrizky.pythonanywhere.com/api/bestplaces?id=`, {
       method: "POST",
       headers: {
         Accept: "application/json",
