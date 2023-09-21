@@ -15,7 +15,10 @@ const BestPlaces = () => {
       body: {},
     })
       .then((res) => res.json())
-      .then((res) => setDestination(res));
+      .then((res) => {
+        setDestination(res);
+        console.log(res);
+      });
   }, []);
   return (
     <div className="p-4">
