@@ -30,7 +30,8 @@ const RecommendForm = () => {
       alert("Mohon isi data dengan lengkap ya!!");
       window.location.reload();
     } else {
-      sessionStorage.setItem("budget", formData.budget);
+      formData.budget = formData.budget.replace(/Rp\s|\./g, "");
+      sessionStorage.setItem("budget", formData.budget.replace(/Rp\s|\./g, ""));
       sessionStorage.setItem("transport", JSON.stringify({ id: "" }));
       navigate("/recommend/transportation", {
         state: {
@@ -88,9 +89,12 @@ const RecommendForm = () => {
             type="text"
             name="budget"
             inputMode="numeric"
-            value={new Intl.NumberFormat().format(
-              formData.budget.replace(/,/g, "")
-            )}
+            value={new Intl.NumberFormat("id-ID", {
+              style: "currency",
+              currency: "IDR",
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            }).format(formData.budget.replace(/Rp|\./g, ""))}
             onKeyDown={numberOnlyFilter}
             onChange={handleChange}
           />
@@ -237,15 +241,15 @@ const RecommendForm = () => {
                     <option value={"pn"}>Paling Nyaman</option>
                   </select>
                 </div>
+                <input
+                  className=" w-full cursor-pointer rounded-xl bg-[#0373F3] py-4 text-center font-medium text-white"
+                  type="submit"
+                  value={"Rekomendasikan Saya!"}
+                />
               </Tab.Panel>
             </Tab.Panels>
           </Tab.Group>
         </div>
-        <input
-          className=" w-full cursor-pointer rounded-xl bg-[#0373F3] py-4 text-center font-medium text-white"
-          type="submit"
-          value={"Rekomendasikan Saya!"}
-        />
       </form>
     </div>
   );
