@@ -18,22 +18,25 @@ const RecommendTransport = () => {
   useEffect(() => {
     setInitialBudget(formData.budget.replace(/,/g, ""));
     setBudget(sessionStorage.getItem("budget").replace(/,/g, ""));
-    fetch(`https://nrizky.pythonanywhere.com/api/recommend_transportasi`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        origin: formData.origin,
-        duration: formData.duartion,
-        departure: formData.departure,
-        budget: formData.budget.replace(/,/g, ""),
-        transport_preference: formData.transport_preference,
-        stay_preference: formData.stay_preference,
-        destination_preference: formData.destination_preference,
-      }),
-    })
+    fetch(
+      `https://d4dc-114-142-168-3.ngrok-free.app/api/recommend_transportasi`,
+      {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          origin: formData.origin,
+          duration: formData.duartion,
+          departure: formData.departure,
+          budget: formData.budget.replace(/,/g, ""),
+          transport_preference: formData.transport_preference,
+          stay_preference: formData.stay_preference,
+          destination_preference: formData.destination_preference,
+        }),
+      }
+    )
       .then((res) => res.json())
       .then((res) => setTransportations(res));
   }, []);

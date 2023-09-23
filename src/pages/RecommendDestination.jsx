@@ -15,7 +15,7 @@ const RecommendDestination = () => {
 
   useEffect(() => {
     setBudget(formData.budget);
-    fetch(`https://nrizky.pythonanywhere.com/api/recommend_wisata`, {
+    fetch(`https://d4dc-114-142-168-3.ngrok-free.app/api/recommend_wisata`, {
       method: "POST",
       headers: {
         Accept: "application/json",

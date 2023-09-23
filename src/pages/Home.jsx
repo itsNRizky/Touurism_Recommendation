@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 const Home = () => {
   const [destination, setDestination] = useState([]);
   useEffect(() => {
-    fetch(`https://nrizky.pythonanywhere.com/api/bestplaces?id=`, {
+    fetch(`https://d4dc-114-142-168-3.ngrok-free.app/api/bestplaces?id=`, {
       method: "POST",
       headers: {
         Accept: "application/json",
